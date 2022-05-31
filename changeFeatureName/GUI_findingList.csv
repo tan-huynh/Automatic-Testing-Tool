@@ -1,0 +1,22 @@
+Previous Name,New Name
+Feature: Validation GUI Monitoring Elements - Graphs,Feature: Graphical Monitoring Elements Tests
+Feature: Validation GUI - Power Up Test,Feature: Power Up Test
+Feature: Validation GUI Overlay For Messages - Parameter And Limits - Neonates,Feature: Overlay Messages Of Parameter With Limits For Neonates
+Feature: Validation GUI - Scroll Wheel,Feature: Scroll Wheel Tests
+Feature: Validation SetUp Of Adult GUI From Subchapter 7.1 To Subchapter 7.11,Feature: Set Up GUI Tests For Adults
+Feature: Validation GUI - Help Function,Feature: Help Function Tests
+Feature: Validation GUI Only Containing INTERACTIVE,Feature: Interactive GUI Tests
+"Feature: Validation GUI - Trend, Status","Feature: Trend, Status Tests"
+Feature: Validation GUI - Alarm Messages,Feature: Alarm Messages Tests
+"Feature: Validation GUI - Day Screen, Night Screen",Feature: Day Screen And Night Screen Tests
+Feature: Validation GUI Overlay For Messages - Parameter And Limits - Children,Feature: Overlay Messages Of Parameter With Limits For Children
+Feature: Validation GUI Monitoring Elements - Loops,Feature: Loops Monitoring Elements
+Feature: Validation GUI - Alarm Warn Limits,Feature: Alarm Warning Limits Tests
+Feature: Validation GUI - Side Menu Bar,Feature: Side Menu Bar Tests
+Feature: Validation GUI - Navigation Bar,Feature: Navigation Bar Tests
+Feature: Validation GUI - General Rules,Feature: General Rules Of GUI Tests
+Feature: Validation GUI Monitoring Elements - Instant View Window,Feature: Instant View Window Monitoring Elements
+Feature: Validation GUI - Workbench,Feature: General Workbench Tests
+Feature: Validation GUI Overlay For Messages - Parameter And Limits - Adults,Feature: Overlay Messages Of Parameter With Limits For Adults
+Feature: Validation GUI - Standby,Feature: Standby Tests
+Feature: Validation GUI - System Test,Feature: System Tests

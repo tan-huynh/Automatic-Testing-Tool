@@ -1,0 +1,49 @@
+| Previous Name                                                                           | New Name                                                                       |
+| --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| Feature: Weaning SBT - Adjustable Parameter, Defaults And Alarm Limits For Neonates     | Feature: SBT Adjustable Parameter, Defaults And Alarm Limits For Neonates      |
+| Feature: Validation Weaning SAT - General Rules For Neonates                            | Feature: SAT General Rules For Neonates                                        |
+| Feature: Weaning WOB - Configuration For Adults                                         | Feature: WOB Configuration For Adults                                          |
+| Feature: Validation Weaning SAT Texts For Adults                                        | Feature: SAT Texts For Adults                                                  |
+| Feature: Scenarios Weaning Interactive Tests (Except SBT Tests)                         | Feature: Interactive Weaning Tests (Without SBT Tests) For Adults              |
+| Feature: Scenarios Tests SBT02 Are Carried On QuickLung Breather                        | Feature: SBT02 With Quick Lung Breather For Adults                             |
+| Feature: Weaning SBT - Protection Against Hazard For Children                           | Feature: SBT Protection Against Hazard For Children                            |
+| Feature: Weaning WOB - Status Notifications For Adults                                  | Feature: WOB Status Notifications For Adults                                   |
+| Feature: Setup Feature For Weaning Tests For Children                                   | Feature: Setup Weaning For Children                                            |
+| Feature: Setup Feature For Weaning Tests For Neonates                                   | Feature: Setup Weaning For Neonates                                            |
+| Feature: Weaning SBT - User Interaction And Design For Children                         | Feature: SBT User Interaction And Design For Children                          |
+| Feature: Weaning SBT - Protection Against Hazard For Adult                              | Feature: SBT Protection Against Hazard For Adult                               |
+| Feature: Setup Feature For Weaning Tests For Adults                                     | Feature: Setup Weaning For Adults                                              |
+| Feature: Validation Weaning SAT - General Rules                                         | Feature: SAT General Rules For Adults                                          |
+| Feature: Validation Weaning P0.1 - Automatic Mode For Adults                            | Feature: P0.1 Automatic Mode For Adults                                        |
+| Feature: Validation Weaning P0.1 - Automatic Mode For Neonates                          | Feature: P0.1 Automatic Mode For Neonates                                      |
+| Feature: Validation Weaning SAT - Weaning Analyzer                                      | Feature: SAT Weaning Analyzer For Adults                                       |
+| Feature: Validation Weaning SAT - Weaning Analyzer For Neonates                         | Feature: SAT Weaning Analyzer For Neonates                                     |
+| Feature: Scenarios Tests SBT01 Are Carried On QuickLung Breather                        | Feature: SBT01 With Quick Lung Breather For Adults                             |
+| Feature: Weaning WOB - General Rules For Children                                       | Feature: WOB General Rules For Children                                        |
+| Feature: Scenarios Manoevure Tests (Except SBT Tests) Are Carried On QuickLung Breather | Feature: Weaning Tests With QuickLung Breather (Without SBT Tests) For Adults  |
+| Feature: Validation Weaning SAT - Weaning Analyzer For Children                         | Feature: SAT Weaning Analyzer For Children                                     |
+| Feature: Spontaneous Breathing With Quick Lung Breather SBT Results                     | Feature: Spontaneous Breathing With Quick Lung Breather SBT Results For Adults |
+| Feature: Weaning WOB - General Rules For Adults                                         | Feature: WOB General Rules For Adults                                          |
+| Feature: Weaning WOB - Configuration For Neonates                                       | Feature: WOB Configuration For Neonates                                        |
+| Feature: Weaning WOB - Restrictions                                                     | Feature: WOB Restrictions For Adults                                           |
+| Feature: Weaning SBT - Adjustable Parameter, Defaults And Alarm Limits For Children     | Feature: SBT Adjustable Parameter, Defaults And Alarm Limits For Children      |
+| Feature: Weaning SBT - User Interaction And Design For Adults                           | Feature: SBT User Interaction And Design For Adults                            |
+| Feature: Weaning SBT - General Requirements For Children                                | Feature: SBT General Requirements For Children                                 |
+| Feature: Validation Weaning SAT - General Rules For Children                            | Feature: SAT General Rules For Children                                        |
+| Feature: Weaning WOB - Description Of Use And GUI For Children                          | Feature: WOB Description Of Use For Children                                   |
+| Feature: Weaning SBT - General Requirements For Neonates                                | Feature: SBT General Requirements For Neonates                                 |
+| Feature: Weaning SBT - Detailed Description Of Use For Children                         | Feature: SBT Detailed Description Of Use For Children                          |
+| Feature: Weaning SBT - Adjustable Parameter, Defaults And Alarm Limits For Adults       | Feature: SBT Adjustable Parameter, Defaults And Alarm Limits For Adults        |
+| Feature: Weaning SBT - Detailed Description Of Use                                      | Feature: SBT Detailed Description Of Use For Adults                            |
+| Feature: Validation Weaning P0.1 - Manual Mode For Adults                               | Feature: P0.1 Manual Mode For Adults                                           |
+| Feature: Weaning WOB - Configuration For Children                                       | Feature: WOB Configuration For Children                                        |
+| Feature: Weaning SBT - General Requirements                                             | Feature: SBT General Requirements For Adults                                   |
+| Feature: Validation Weaning P0.1 - Automatic Mode For Children                          | Feature: P0.1 Automatic Mode For Children                                      |
+| Feature: Validation Weaning P0.1 - Manual Mode For Neonates                             | Feature: P0.1 Manual Mode For Neonates                                         |
+| Feature: Weaning WOB - Restrictions For Children                                        | Feature: WOB Restrictions For Children                                         |
+| Feature: Weaning WOB - Description Of Use And GUI                                       | Feature: WOB Description Of Use And GUI For Adults                             |
+| Feature: Weaning WOB - Status Notifications For Children                                | Feature: WOB Status Notifications For Children                                 |
+| Feature: Weaning WOB - General Rules For Neonates                                       | Feature: WOB General Rules For Neonates                                        |
+| Feature: Validation Weaning P0.1 - Manual Mode For Children                             | Feature: P0.1 Manual Mode For Children                                         |
+| Feature: Validation Weaning SAT Texts For Children                                      | Feature: SAT Texts For Children                                                |
+| Feature: Weaning WOB - Status Notifications For Neonates                                | Feature: WOB Status Notifications For Neonates                                 |

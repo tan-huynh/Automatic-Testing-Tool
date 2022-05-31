@@ -1,0 +1,86 @@
+Previous Name,New Name
+Feature: Validation Manoeuvre Bronchoscopy - GUI For Child,Feature: Bronchoscopy GUI For Child
+Feature: Validation Manoeuvre Sigh - Setable Parameter Default For Neonates,Feature: Sigh Setable Parameter Default For Neonates
+Feature: Validation Manoeuvre PEEP - Setable Parameter For Adults,Feature: PEEP Setable Parameter For Adults
+Feature: Validation Manoeuvre Bronchoscopy - Alarms Notifications For Neonate,Feature: Bronchoscopy Alarms Notifications For Neonate
+Feature: Validation Manoeuvre Expiration Hold - General Rules For Children,Feature: Expiration Hold General Rules For Children
+Feature: Validation Manoeuvre PEEP - General Rules For Adults,Feature: PEEP General Rules For Adults
+Feature: Validation Manoeuvre Sigh - Setable Parameter Ranges For Adults,Feature: Sigh Setable Parameter Ranges For Adults
+Feature: Validation Manoeuvre Recruitment - General Rules For Neonates,Feature: Recruitment General Rules For Neonates
+Feature: Validation Manoeuvre Sigh - Setable Parameter Default For Adults,Feature: Sigh Setable Parameter Default For Adults
+Feature: Validation Manoeuvre General Rules Of Manoeuvre For Adults,Feature: General Rules Manoeuvre For Adults
+Feature: Validation Manoeuvre Sigh - Expiration Sigh For Children,Feature: Sigh Expiration Sigh For Children
+Feature: Validation Manoeuvre Manual Breath - General Rules For Neonates,Feature: Manual Breath General Rules For Neonates
+Feature: Validation Manoeuvre PEEP - Phases Of The Manoeuvre For Adults,Feature: PEEP Phases Of The Manoeuvre For Adults
+Feature: Validation Manoeuvre PEEP - General Rules For Children,Feature: PEEP General Rules For Children
+Feature: Validation Manoeuvre PEEP - Setable Parameter For Children,Feature: PEEP Setable Parameter For Children
+"Feature: Validation Manoeuvre Inspiration Hold - Setable Parameter - Default Values, Manufacturers Setup For Children",Feature: Inspiration Hold Setable Parameter Default Values For Children
+Feature: Validation Manoeuvre Sigh - Inspiration Sigh For Adults,Feature: Sigh Inspiration Sigh For Adults
+Feature: Validation Manoeuvre Recruitment - General Rules For Children,Feature: Recruitment General Rules For Children
+Feature: Setup Feature For Manoeuvres Tests On Neonates,Feature: Setup Manoeuvres Tests For Neonates
+"Feature: Validation Manoeuvre Expiration Hold - Setable Parameter - Ranges, Increments And Tolerances For Children",Feature: Expiration Hold Setable Parameter Ranges Increments And Tolerances For Children
+"Feature: Validation Manoeuvre Inspiration Hold - Setable Parameter – Ranges, Increments And Tolerances For Children",Feature: Inspiration Hold Setable Parameter Ranges Increments And Tolerances For Children
+Feature: Validation Manoeuvre PEEP - Safety Assessment For Adults,Feature: PEEP Safety Assessment For Adults
+"Feature: Validation Manoeuvre Inspiration Hold - Setable Parameter – Ranges, Increments And Tolerances For Adults",Feature: Inspiration Hold Setable Parameter Ranges Increments And Tolerances For Adults
+Feature: Validation Manoeuvre List Of Manoeuvre And Their Availability For Neonates,Feature: List Of Manoeuvre And Their Availability For Neonates
+Feature: Validation Manoeuvre PEEP - GUI Display And Representations For Adults,Feature: PEEP GUI Display And Representations For Adults
+Feature: Adult - Manoeuvres Interactive Tests (Except QLB Tests),Feature: Interactive Manoeuvre Tests Mandatory Breaths For Adults
+Feature: Validation Manoeuvre Tests Running With Retry For Adults,Feature: Manoeuvre Tests Running With Manual Breaths Triggered Several Times For Adults
+Feature: Validation Manoeuvre Bronchoscopy - Alarms Notifications For Child,Feature: Bronchoscopy Alarms Notifications For Child
+Feature: Validation Manoeuvre PEEP - Safety Assessment For Children,Feature: PEEP Safety Assessment For Children
+Feature: Validation Manoeuvre Inspiration Hold - General Rules For Children,Feature: Inspiration Hold General Rules For Children
+Feature: Validation Manoeuvre Bronchoscopy Adults - General Rules,Feature: Bronchoscopy General Rules For Adults
+Feature: Validation Manoeuvre General Rules Of Manoeuvre For Children,Feature: General Rules Manoeuvre For Children
+Feature: Validation Manoeuvre Sigh - Setable Parameter Ranges For Children,Feature: Sigh Setable Parameter Ranges For Children
+"Feature: Validation Manoeuvre Expiration Hold - Setable Parameter - Ranges, Increments And Tolerances For Adults",Feature: Expiration Hold Setable Parameter Ranges Increments And Tolerances For Adults
+Feature: Validation Manoeuvre PEEP - Configuration For Adults,Feature: PEEP Configuration For Adults
+"Feature: Validation Manoeuvre Expiration Hold - Setable Parameter - Default Values, Manufacturers Setup For Children",Feature: Expiration Hold Setable Parameter Default Values For Children
+Feature: Validation Manoeuvre PEEP - Configuration For Children,Feature: PEEP Configuration For Children
+Feature: Validation Manoeuvre Bronchoscopy - General Rules,Feature: Bronchoscopy General Rules For Adults
+Feature: Validation Manoeuvre General Rules Of Manoeuvre For Neonates,Feature: General Rules Manoeuvre For Neonates
+Feature: Validation Manoeuvre Bronchoscopy Children - General Rules,Feature: Bronchoscopy General Rules For Children
+Feature: Scenarios Manoeuvres Tests (Except SBT Tests) Are Carried On QuickLung Breather For Children,Feature: Manoeuvres Tests (Without SBT Tests) With Spontaneous Breaths For Children
+"Feature: Validation Manoeuvre Inspiration Hold - Setable Parameter - Default Values, Manufacturers Setup For Adults",Feature: Inspiration Hold Setable Parameter Default Values For Adults
+Feature: Validation Manoeuvre Expiration Hold - General Rules For Adults,Feature: Expiration Hold General Rules For Adults
+Feature: Validation Manoeuvre Sigh - Expiration Sigh For Neonates,Feature: Sigh Expiration Sigh For Neonates
+"Feature: Validation Manoeuvre Expiration Hold - Setable Parameter - Default Values, Manufacturers Setup For Neonates",Feature: Expiration Hold Setable Parameter Default Values For Neonates
+Feature: Validation Manoeuvre PEEP - Safety Assessment For Neonates,Feature: PEEP Safety Assessment For Neonates
+Feature: Validation Manoeuvre PEEP - Configuration For Neonates,Feature: PEEP Configuration For Neonates
+Feature: Validation Manoeuvre Expiration Hold - General Rules For Neonates,Feature: Expiration Hold General Rules For Neonates
+Feature: Validation Manoeuvre Tests Running With Relay For Adults,Feature: Manoeuvre Tests With Relay For Adults
+Feature: Validation Manoeuvre Recruitment - General Rules For Adults,Feature: Recruitment General Rules For Adults
+Feature: Validation Manoeuvre Manual Breath - General Rules For Children,Feature: Manual Breath General Rules For Children
+Feature: Validation Manoeuvre Manual Breath - General Rules For Adults,Feature: Manual Breath General Rules For Adults
+Feature: Validation Manoeuvre Bronchoscopy - GUI For Adult,Feature: Bronchoscopy GUI For Adult
+Feature: Validation Manoeuvre Sigh - General Rules For Children,Feature: Sigh General Rules For Children
+Feature: Validation Manoeuvre PEEP - Setable Parameter For Neonates,Feature: PEEP Setable Parameter For Neonates
+Feature: Validation Manoeuvre Sigh - Inspiration Sigh For Neonates,Feature: Sigh Inspiration Sigh For Neonates
+Feature: Validation Manoeuvre Tests Running With Retry For Neonates,Feature: Manoeuvre Tests With Manual Breaths Triggered Several Times For Neonates
+Feature: Setup Feature For Manoeuvres Tests On Children,Feature: Setup Manoeuvres Tests For Children
+Feature: Validation Manoeuvre Sigh - General Rules For Neonates,Feature: Sigh General Rules For Neonates
+Feature: Validation Manoeuvre List Of Manoeuvre And Their Availability For Adults,Feature: List Of Manoeuvre And Their Availability For Adults
+"Feature: Validation Manoeuvre Expiration Hold - Setable Parameter - Default Values, Manufacturers Setup For Adults",Feature: Expiration Hold Setable Parameter Default Values For Adults
+Feature: Validation Manoeuvre Sigh - Expiration Sigh For Adults,Feature: Sigh Expiration Sigh For Adults
+Feature: Validation Manoeuvre Bronchoscopy - GUI For Neonate,Feature: Bronchoscopy GUI For Neonate
+Feature: Validation Manoeuvre Inspiration Hold - General Rules For Adults,Feature: Inspiration Hold General Rules For Adults
+Feature: Validation Manoeuvre PEEP - GUI Display And Representations For Children,Feature: PEEP GUI Display And Representations For Children
+Feature: Validation Manoeuvre Sigh - General Rules For Adults,Feature: Sigh General Rules For Adults
+"Feature: Validation Manoeuvre Inspiration Hold - Setable Parameter – Ranges, Increments And Tolerances For Neonates",Feature: Inspiration Hold Setable Parameter Ranges Increments And Tolerances For Neonates
+Feature: Validation Manoeuvre PEEP - General Rules For Neonates,Feature: PEEP General Rules For Neonates
+Feature: Validation Manoeuvre Bronchoscopy - Alarms Notifications For Adult,Feature: Bronchoscopy Alarms Notifications For Adult
+Feature: Validation Manoeuvre Tests Running With Retry For Children,Feature: Manoeuvre Tests With Manual Breaths Triggered Several Times For Children
+Feature: Validation Manoeuvre Sigh - Inspiration Sigh For Children,Feature: Sigh Inspiration Sigh For Children
+Feature: Validation Manoeuvre PEEP - Phases Of The Manoeuvre For Neonates,Feature: PEEP Phases Of The Manoeuvre For Neonates
+Feature: Validation Manoeuvre Inspiration Hold - General Rules For Neonates,Feature: Inspiration Hold General Rules For Neonates
+Feature: Validation Manoeuvre Tests Running With Relay For Children,Feature: Manoeuvre Tests With Relay For Children
+"Feature: Validation Manoeuvre Expiration Hold - Setable Parameter - Ranges, Increments And Tolerances For Neonates",Feature: Expiration Hold Setable Parameter Ranges Increments And Tolerances For Neonates
+Feature: Setup Feature For Manoeuvres Tests On Adults,Feature: Setup Manoeuvres Tests For Adults
+Feature: Child - Manoeuvres Interactive Tests (Except QLB Tests),Feature: Interactive Manoeuvre Tests Mandatory Breaths For Children
+"Feature: Validation Manoeuvre Inspiration Hold - Setable Parameter - Default Values, Manufacturers Setup For Neonates",Feature: Inspiration Hold Setable Parameter Default Values For Neonates
+Feature: Scenarios Manoeuvres Tests (Except SBT Tests) Are Carried On QuickLung Breather For Adults,Feature: Manoeuvres Tests (Without SBT Tests) With Spontaneous Breaths For Adults
+Feature: Validation Manoeuvre PEEP - Phases Of The Manoeuvre For Children,Feature: PEEP Phases Of The Manoeuvre For Children
+Feature: Validation Manoeuvre Sigh - Setable Parameter Ranges For Neonates,Feature: Sigh Setable Parameter Ranges For Neonates
+Feature: Neonate - Manoeuvres Interactive Tests (Except QLB Tests),Feature: Interactive Manoeuvre Tests Mandatory Breaths For Neonates
+Feature: Validation Manoeuvre Sigh - Setable Parameter Default For Children,Feature: Sigh Setable Parameter Default For Children
+Feature: Validation Manoeuvre List Of Manoeuvre And Their Availability For Children,Feature: List Of Manoeuvre And Their Availability For Children
+Feature: Validation Manoeuvre PEEP - GUI Display And Representations For Neonates,Feature: PEEP GUI Display And Representations For Neonates
