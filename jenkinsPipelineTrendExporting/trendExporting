@@ -1,0 +1,84 @@
+def getUSBDirectory
+pipeline {
+    agent any
+    stages {
+        stage('Elisa2Repo') {
+            steps {
+                checkout([$class: 'GitSCM', branches: [[name: '*/$SQUISH_BRANCH']], extensions: [[$class: 'CloneOption', noTags: false, reference: '/var/lib/jenkins/git_repo_references', shallow: false, timeout: 5]], userRemoteConfigs: [[credentialsId: 'testlabor', url: 'ssh://git@gitlab.inh.lmi-dev.de:2222/elisa/elisa2.git']]])
+            }
+        }
+        stage('StartSquishRunner') {
+            steps {
+                sh '''# remove not needed folders from workspace
+                    rm -rf $WORKSPACE/app
+                    rm -rf $WORKSPACE/build_tools
+                    rm -rf $WORKSPACE/common
+                    rm -rf $WORKSPACE/doc
+                    rm -rf $WORKSPACE/external
+                    rm -rf $WORKSPACE/HAL
+                    rm -rf $WORKSPACE/implementations
+                    rm -rf $WORKSPACE/sonargraph
+                    rm -rf $WORKSPACE/tools
+                    # create squishserver configfile
+                    echo "[General]" > $WORKSPACE/$ELISA_IP.config
+                    echo "attachableAUT/EPCremote = zzz$ELISA_IP:8888zzz" >> $WORKSPACE/$ELISA_IP.config
+                    sed -i 's/zzz/"/g' $WORKSPACE/$ELISA_IP.config
+                    cat $WORKSPACE/$ELISA_IP.config
+                    # create log dir
+                    mkdir -p $WORKSPACE/testresults
+                    mkdir -p $WORKSPACE/logfiles
+                    # run squishrunner
+                    export bamboo_CMAKE_BUILD_PARALLEL_LEVEL=1
+                    . $WORKSPACE/bamboo/Squish/squishTestDefinitions.sh
+                    squishTestsDir="$WORKSPACE/test/ui/squish/"
+                    export SQUISH_AUTO_SCREENSHOT=3
+                    export SQUISH_SCRIPT_DIR="${squishTestsDir}/shared:${squishTestsDir}/../../scripts"
+                    $SQUISH_PACKAGE/bin/squishserver --configfile $WORKSPACE/$ELISA_IP.config --verbose --port $SQUISHSERVER_PORT --daemon
+                '''
+            }
+        }
+        stage('TrendExporting') {
+            steps {
+                squish([extraOptions: '''
+                --tags
+                EXPORT_TREND
+                --scriptargs
+                BLOWER.BATTERY.ADULTS.feature''', host: '127.0.0.1', port: '$SQUISHSERVER_PORT', resultFolder: '$WORKSPACE/testresults', squishPackageName: '6.7.0', testCase: 'tst_AdditionalTests', testSuite: '$WORKSPACE/test/ui/squish/EPC'])
+            }
+        }
+        stage('TrendSaving') {
+            steps {
+                script {
+                    getUSBDirectory = sh(returnStdout: true, script: '''#!/bin/bash
+                        mkdir trends
+                        ssh root@\$ELISA_IP "ls /media | grep 'ELISA-USBSTICK' | cut -c 1-26" > trends/ls.log
+                        if grep -q "sd[a-z][1-9]" trends/ls.log; then
+                          word=\$(cat trends/ls.log)
+                          echo \$word | grep -o 'ELISA-USBSTICK-sd[a-z][1-9]'
+                        fi
+                    ''').trim() as String
+                    // interpolate $getUSBDirectory when executing sh
+                    sh """scp -r root@\$ELISA_IP:/media/$getUSBDirectory/Trends/* \$WORKSPACE/trends
+                          ssh root@\$ELISA_IP "rm -rf /media/$getUSBDirectory/Trends" """
+                }
+            }
+        }
+        stage('EndSquishrunner') {
+            steps {
+                sh '''tar -czf $WORKSPACE/logfiles/trends.tgz $WORKSPACE/trends
+                tar -czf $WORKSPACE/logfiles/testresults.tgz $WORKSPACE/testresults
+                $SQUISH_PACKAGE/bin/squishserver --port $SQUISHSERVER_PORT --stop'''
+            }
+        }
+        stage('Archive') {
+            steps {
+                archiveArtifacts artifacts: 'logfiles/*.tgz', followSymlinks: false
+            }
+        }
+        stage('Clean') {
+            steps {
+                cleanWs()
+            }
+        }
+    }
+}
