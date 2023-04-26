@@ -1,0 +1,333 @@
+def readConfigFile
+def result
+def final VERSION
+def squishVersion
+def concatenateName
+def buildNumber = currentBuild.number
+def featureFiles = []
+def manOrWean = params.MANOEUVRE_OR_WEANING.toLowerCase()
+def testCase = params.TEST_CASE.toLowerCase()
+def isElisaDevice = DEVICE_TYPE in ['Elisa300', 'Elisa500', 'Elisa600', 'Elisa800']
+def triggerSetUpFile = params.RUN_SETUP ? "setUpIncluded" : "setUpExcluded"
+def argumentOptionScriptArgs = params.argumentOptionScriptArgs ?: "runWeaningAdults"
+def sectionsList = ['weaning_adults', 'weaning_children', 'weaning_neonates', 'manoeuvre_adults', 'manoeuvre_children', 'manoeuvre_neonates']
+def createDeviceSectionMap(deviceType, sections) {
+    def deviceSectionMap = [:]
+    switch (deviceType) {
+        case "Elisa300":
+        case "Elisa500":
+            deviceSectionMap[deviceType] = sections.findAll { section ->
+                section.contains("weaning") && (section.contains("adults") || section.contains("children")) || 
+                section.contains("manoeuvre") && (section.contains("adults") || section.contains("children"))
+            }
+            break
+        case "Elisa600":
+        case "Elisa800":
+            deviceSectionMap[deviceType] = sections.findAll { section ->
+                section.contains("weaning") && (section.contains("adults") || section.contains("children") || section.contains("neonates")) || 
+                section.contains("manoeuvre") && (section.contains("adults") || section.contains("children") || section.contains("neonates"))
+            }
+            break
+        default:
+            println("Error: Invalid device type")
+    }
+    return deviceSectionMap
+}
+def testCaseList = ['tst_Validation_Weaning_6', 'tst_Validation_Manoeuvre_6']
+def triggerGroupFeature = ['runWeaningAdults', 'runWeaningChildren', 'runWeaningNeonates', 'runManoeuvreAdults', 'runManoeuvreChildren', 'runManoeuvreNeonates']
+def sectionsToTriggerMap = sectionsList.collectEntries { section ->
+    [(section): triggerGroupFeature[sectionsList.indexOf(section)]]
+}
+def readSquishVersion() {
+    script {
+        dir('bamboo/Squish') {
+            def readSquishVersion = readFile(file: 'buildSquishInfo.sh')
+            def pattern = /SQUISH_VERSION="(\d+\.\d+\.\d+)"/
+            def matcher = (readSquishVersion =~ pattern)
+            if (matcher.find()) {
+                return matcher.group(1)
+            }
+        }
+    }
+}
+def executeFeatureFile(argumentOptionScriptArgs, triggerSetUpFile) {
+    stage("Execute '$argumentOptionScriptArgs'") {
+        echo "Rerun feature '$argumentOptionScriptArgs'"
+        concatenateName = "\n--scriptargs\n${argumentOptionScriptArgs}:${triggerSetUpFile}"
+        def squishPackage = readSquishVersion()
+        squish([extraOptions: concatenateName, host: '127.0.0.1', port: '$SQUISHSERVER_PORT', resultFolder: '$WORKSPACE/testresults', squishPackageName: squishPackage, testCase: "${params.TEST_CASE}", testSuite: '$WORKSPACE/test/ui/squish/EPC'])   
+    }
+}
+def executeGroupFeatureInSection(SECTION_NAME, runGroupFeature) {
+    stage("Execute partially section tests '$SECTION_NAME'") {
+        echo "Run group of feature '$SECTION_NAME'"
+        concatenateName = "\n--scriptargs\n${runGroupFeature}"
+        def squishPackage = readSquishVersion()
+        squish([extraOptions: concatenateName, host: '127.0.0.1', port: '$SQUISHSERVER_PORT', resultFolder: '$WORKSPACE/testresults', squishPackageName: squishPackage, testCase: "${params.TEST_CASE}", testSuite: '$WORKSPACE/test/ui/squish/EPC'])
+    }
+}
+pipeline {
+    agent any
+        parameters {
+            choice(name: 'OPTIONS', choices: ['PARTIAL SECTION', 'SINGULAR FEATURE', 'COMPREHENSIVE TESTCASE'], description: 'Select how you want to execute the tests')
+            choice(name: 'MANOEUVRE_OR_WEANING', choices: ['WEANING', 'MANOEUVRE'], description: 'Select test cases which you want to execute the tests')
+            booleanParam(name: 'RUN_SETUP', defaultValue: false, description: 'Should the set up file be executed?')
+            string(name: 'TEST_CASE', defaultValue: 'tst_Validation_Weaning_6', description: 'Name of the test case (tst_Validation_Weaning_6/tst_Validation_Manoeuvre_6)')
+            string(name: 'SECTION_NAME', defaultValue: 'weaning_adults', description: 'Name of the section in the config file')
+            string(name: 'FEATURE_NAME', defaultValue: '', description: 'Name of the feature to run in Squish')
+    }
+    stages {
+        stage('Elisa2Repo') {
+            steps {
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: "*/${SQUISH_BRANCH}"]],
+                    doGenerateSubmoduleConfigurations: false,
+                    extensions: [
+                        [
+                            $class: 'SparseCheckoutPaths',
+                            sparseCheckoutPaths: [[path: 'bamboo/'], [path: 'test/']]
+                        ]
+                    ],
+                    submoduleCfg: [],
+                    userRemoteConfigs: [[
+                        credentialsId: 'testlabor',
+                        url: 'ssh://git@gitlab.inh.lmi-dev.de:2222/elisa/elisa2.git'
+                    ]]
+                ])
+                script {
+                    if (params.'SQUISH_PACKAGE') {
+                        squishVersion = params.'SQUISH_PACKAGE'
+                    } else {
+                        VERSION = readSquishVersion()
+                        squishVersion  = "/opt/squish/squish-for-qt-desktop_${VERSION}"
+                    }
+                }
+            }
+        }
+        stage('StartSquishRunner') {
+            environment {
+                SQUISH_PACKAGE = "${squishVersion}"
+            }
+            steps {
+                sh '''
+                    echo '[General]\nattachableAUT/EPCremote = "'"$ELISA_IP:8888"'"' > "$WORKSPACE/$ELISA_IP.config"
+                    cat $WORKSPACE/$ELISA_IP.config
+                    # create log dir
+                    mkdir -p $WORKSPACE/testresults $WORKSPACE/logfiles
+                    export bamboo_CMAKE_BUILD_PARALLEL_LEVEL=1
+                    . $WORKSPACE/bamboo/Squish/squishTestDefinitions.sh
+                    squishTestsDir="$WORKSPACE/test/ui/squish/"
+                    export SQUISH_AUTO_SCREENSHOT=3
+                    $SQUISH_PACKAGE/bin/squishserver --configfile $WORKSPACE/$ELISA_IP.config --verbose --port $SQUISHSERVER_PORT --daemon
+                '''
+            }
+        }
+        stage('Confirm the test directory') {
+            steps {
+                script {
+                    def directory = params.MANOEUVRE_OR_WEANING == 'MANOEUVRE' ? 'test/ui/squish/EPC/tst_Validation_Manoeuvre_6' : 'test/ui/squish/EPC/tst_Validation_Weaning_6'
+                    dir(directory) {
+                        readConfigFile = readFile(file: 'config.ini')
+                        echo "Executing ${params.MANOEUVRE_OR_WEANING.toLowerCase()} tests"
+                        sh "ls -l"
+                    }
+                }
+            }
+        }
+        stage('Execute a singular feature') {
+            when {
+                expression { params.OPTIONS == 'SINGULAR FEATURE' }
+            }
+            steps {
+                script {
+                    def suffixMap = [:]
+                    def testcases = ['weaning', 'manoeuvre']
+                    def patients = ['Adults', 'Children', 'Neonates']
+                    for (testcase in testcases) {
+                        for (patient in patients) {
+                            // section part
+                            def key = "${testcase}_${patient.toLowerCase()}"
+                            // mapping patient suffix corresponding to specific section 
+                            def value = "_${patient}.feature"
+                            suffixMap[key] = value
+                        }
+                    }
+                    echo 'Executing a specific test'
+                    if ((testCase.contains(manOrWean)) && (params.SECTION_NAME.contains(manOrWean))){
+                        if (params.MANOEUVRE_OR_WEANING in ['WEANING', 'MANOEUVRE'] && 
+                        readConfigFile.contains("[" + params.SECTION_NAME.toLowerCase() + "]") && 
+                        params.TEST_CASE in testCaseList && 
+                        params.SECTION_NAME in suffixMap.keySet() && 
+                        isElisaDevice) {
+                            if (readConfigFile.contains("[" + params.SECTION_NAME.toLowerCase() + "]")) {
+                                def matcher = readConfigFile =~ /(?<=\=)\s+(.*?\.feature)/
+                                featureFiles = matcher.collect { match -> match[1] }
+                            }
+                            result = featureFiles.findAll { it.endsWith(suffixMap.get(params.SECTION_NAME)) }
+                            if (result.contains(params.FEATURE_NAME)) {
+                                argumentOptionScriptArgs = params.FEATURE_NAME
+                                executeFeatureFile(argumentOptionScriptArgs,triggerSetUpFile)
+                                currentBuild.displayName = "#${buildNumber}: ${argumentOptionScriptArgs}"
+                                return
+                            } else {
+                                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                                    error("The feature '$params.FEATURE_NAME' is not available in the feature files")
+                                }
+                            }
+                        } else {
+                            catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                                error("Invalid or unsupported configuration")
+                            }
+                        }
+                    } else {
+                        catchError(buildResult: 'FAILURE', stageResult: 'UNSTABLE') {
+                            error("Mismatch between the choice and test case/section")
+                        }
+                    }
+                    if (!(testCase.contains(manOrWean) && params.SECTION_NAME.contains(manOrWean))) {
+                        currentBuild.displayName = "#${buildNumber}: [${params.MANOEUVRE_OR_WEANING}] Mismatch choice vs testcase/section"
+                    } else if (!(params.TEST_CASE in testCaseList)) {
+                        currentBuild.displayName = "#${buildNumber}: [${params.MANOEUVRE_OR_WEANING}] Testcase not exist"
+                        return
+                    } else if (!(params.SECTION_NAME in sectionsList)) {
+                        currentBuild.displayName = "#${buildNumber}: [${params.MANOEUVRE_OR_WEANING}] Section not exist"   
+                        return
+                    } else if (!isElisaDevice) {
+                        currentBuild.displayName = "#${buildNumber}: [${params.MANOEUVRE_OR_WEANING}] Device not exist"   
+                        return
+                    } else if (!(params.FEATURE_NAME in featureFiles)) {
+                        currentBuild.displayName = "#${buildNumber}: [${params.MANOEUVRE_OR_WEANING}] Feature not exist"
+                        return
+                    }
+                }
+                echo "The feature file name for section '$params.SECTION_NAME' is: $result"
+            }
+        }
+        stage('Execute partially section tests') {
+            when {
+                expression { params.OPTIONS == 'PARTIAL SECTION' }
+            }
+            steps {
+                script {
+                    echo 'Executing partially section tests'
+                    if (isElisaDevice) {
+                        if (params.TEST_CASE in testCaseList) {
+                            if (params.SECTION_NAME in sectionsList) {
+                                if ((params.MANOEUVRE_OR_WEANING == 'WEANING') || (params.MANOEUVRE_OR_WEANING == 'MANOEUVRE')) {
+                                    if ((testCase.contains(manOrWean)) && (params.SECTION_NAME.contains(manOrWean))){ 
+                                        def sectionGroupFeature = sectionsToTriggerMap[params.SECTION_NAME]
+                                        executeGroupFeatureInSection(params.SECTION_NAME, sectionGroupFeature)
+                                        // custom displayName of the current build 
+                                        currentBuild.displayName = "#${buildNumber}: Group of features ${params.SECTION_NAME}"
+                                        return
+                                    } else {
+                                        catchError(buildResult: 'FAILURE', stageResult: 'UNSTABLE') {
+                                            error("Mismatch between the choice and test case/section")
+                                        }
+                                    }
+                                }
+                            } else {
+                                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                                    error("Unable to find any section in the configuration")
+                                }
+                            }   
+                        } else {
+                            catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                                error("Unable to find any test case in the configuration")
+                            }
+                        }
+                    } else {
+                        catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                            error("The '$DEVICE_TYPE' is not supported for this section")
+                        }
+                    }
+                    if (!(params.TEST_CASE in testCaseList)) {
+                        currentBuild.displayName = "#${buildNumber}: [${params.MANOEUVRE_OR_WEANING}] Testcase not exist"
+                    } else if (!(params.SECTION_NAME in sectionsList)) {
+                        currentBuild.displayName = "#${buildNumber}: [${params.MANOEUVRE_OR_WEANING}] Section not exist"   
+                    } else if (!isElisaDevice) {
+                        currentBuild.displayName = "#${buildNumber}: [${params.MANOEUVRE_OR_WEANING}] '${DEVICE_TYPE}' not exist"
+                    } else if (!(testCase.contains(manOrWean) && params.SECTION_NAME.contains(manOrWean))) {
+                        currentBuild.displayName = "#${buildNumber}: [${params.MANOEUVRE_OR_WEANING}] Mismatch choice vs testcase/section"
+                    }    
+                }
+            }
+        }
+        stage('Execute comprehensive test case') {
+            when {
+                expression { params.OPTIONS == 'COMPREHENSIVE TESTCASE' }
+            }
+            steps {
+                script {
+                    def isWeaning = params.MANOEUVRE_OR_WEANING == 'WEANING'
+                    def isManoeuvre = params.MANOEUVRE_OR_WEANING == 'MANOEUVRE'
+                    def hasWeaningConfig = readConfigFile.contains('[weaning_adults]') || readConfigFile.contains('[weaning_children]') || readConfigFile.contains('[weaning_neonates]')
+                    def hasManoeuvreConfig = readConfigFile.contains('[manoeuvre_adults]') || readConfigFile.contains('[manoeuvre_children]') || readConfigFile.contains('[manoeuvre_neonates]')
+                    def isValidTest = params.TEST_CASE in testCaseList
+                    echo 'Executing comprehensive test case'
+                    if ((isWeaning && hasWeaningConfig) || (isManoeuvre && hasManoeuvreConfig)) {
+                        if (testCase.contains(manOrWean)) { 
+                            def keyword = isWeaning ? 'weaning' : 'manoeuvre'
+                            def filteredSections = []
+                            def deviceSectionMap = [:]
+                            ["Elisa300", "Elisa500", "Elisa600", "Elisa800"].each { device ->
+                                deviceSectionMap.putAll(createDeviceSectionMap(device, sectionsList))
+                            }
+                            for (section in deviceSectionMap[DEVICE_TYPE]) {
+                                if (sectionsList.contains(section) && section.startsWith(keyword)) {
+                                    filteredSections.add(section)
+                                }
+                            }
+                            if (isElisaDevice && isValidTest) {
+                                filteredSections.each { section ->
+                                    def triggerGroup = sectionsToTriggerMap[section]
+                                    executeGroupFeatureInSection(section, triggerGroup)
+                                }
+                                currentBuild.displayName = "#${buildNumber}: ${params.TEST_CASE} completely executed"
+                            } else {
+                                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                                    error("The '$DEVICE_TYPE' is not supported")
+                                }
+                            }
+                        } else {
+                            catchError(buildResult: 'FAILURE', stageResult: 'UNSTABLE') {
+                                error("Mismatch between the choice and test case")
+                            }
+                        }
+                    } else {
+                        catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                            error("Unable to find any test case in the configuration")
+                        }
+                    }
+                    if (!isValidTest) {
+                        currentBuild.displayName = "#${buildNumber}: [${params.MANOEUVRE_OR_WEANING}] Testcase not exist"
+                    } else if (!(testCase.contains(manOrWean))) {
+                        currentBuild.displayName = "#${buildNumber}: [${params.MANOEUVRE_OR_WEANING}] Mismatch choice vs testcase"
+                    } else if (!isElisaDevice) {
+                        currentBuild.displayName = "#${buildNumber}: [${params.MANOEUVRE_OR_WEANING}] Device not exist"   
+                    }
+                }
+            }
+        }
+        stage('End Squishrunner') {
+            environment {
+                SQUISH_PACKAGE = "${squishVersion}"
+            }
+            steps {
+                sh '''tar -czf $WORKSPACE/logfiles/testresults.tgz $WORKSPACE/testresults
+                $SQUISH_PACKAGE/bin/squishserver --port $SQUISHSERVER_PORT --stop'''
+            }
+        }
+        stage('Archive') {
+            steps {
+                archiveArtifacts artifacts: 'logfiles/*.tgz', followSymlinks: false
+            }
+        }
+        stage('Clean') {
+            steps {
+                cleanWs()
+            }
+        }
+    }
+}
